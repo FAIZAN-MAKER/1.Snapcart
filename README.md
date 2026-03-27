@@ -1,6 +1,7 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
+mongodb+srv://un6902090_db_user:uBcZAHxQKue9UlLX@cluster0.w3iwr6c.mongodb.net/
 
 First, run the development server:
 
