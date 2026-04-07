@@ -3,6 +3,7 @@ import { Poppins, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Provider from "../provider";
 import StoreProvider from "@/redux/StoreProvider";
+import InitUser from "@/InitUser";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -37,6 +38,7 @@ export default function RootLayout({
       >
         <Provider>
           <StoreProvider>
+            <InitUser/>
               {children}
           </StoreProvider>
         </Provider>
