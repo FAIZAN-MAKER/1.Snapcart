@@ -7,7 +7,8 @@ import Nav from "@/Components/Nav";
 import AdminDashBoard from "@/Components/AdminDashBoard";
 import UserDashboard from "@/Components/UserDashboard";
 import DeliveryBoy from "@/Components/DeliveryBoy";
-import Footer from "@/Components/Footer"; // Import your new Footer
+import Footer from "@/Components/Footer";
+import SocketConnector from "@/Components/SocketConnector";
 
 export default async function Home() {
   await connectDb();
@@ -28,6 +29,7 @@ export default async function Home() {
 
   return (
     <div className="flex flex-col min-h-screen">
+      <SocketConnector user={plainUser} />
       <Nav user={plainUser} />
 
       {/* Main content area grows to push footer down */}
