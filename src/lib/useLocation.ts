@@ -13,17 +13,19 @@ interface UseLocationOptions {
   driverId?: string;
   onLocationUpdate?: (data: LocationData & { driverId: string; timestamp: number }) => void;
   enabled?: boolean;
+  saveToDb?: boolean;
 }
 
 export const useLocationSender = ({
   orderId,
   driverId,
   enabled = true,
+  saveToDb = true,
 }: UseLocationOptions) => {
   const socketRef = useRef(getSocket());
 
   const sendLocation = useCallback(
-    (latitude: number, longitude: number) => {
+    async (latitude: number, longitude: number) => {
       const socket = socketRef.current;
       if (socket?.connected && driverId) {
         socket.emit("update-location", {
@@ -32,9 +34,21 @@ export const useLocationSender = ({
           longitude,
           driverId,
         });
+
+        if (saveToDb) {
+          try {
+            await fetch("/api/user/update-location", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ latitude, longitude }),
+            });
+          } catch (error) {
+            console.error("Error saving location to DB:", error);
+          }
+        }
       }
     },
-    [orderId, driverId]
+    [orderId, driverId, saveToDb]
   );
 
   useEffect(() => {
