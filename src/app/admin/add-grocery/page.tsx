@@ -345,7 +345,6 @@ const AddGroceryPage = () => {
     <div className="min-h-screen px-4 sm:px-6 py-8 max-w-2xl mx-auto">
       <motion.div className="flex flex-col gap-8" variants={containerVariants} initial="hidden" animate="show">
 
-        {/* Back button */}
         <motion.div variants={itemVariants}>
           <Link href="/">
             <motion.div
@@ -402,7 +401,7 @@ const AddGroceryPage = () => {
             />
           </Field>
 
-          {/* Category */}
+
           <motion.div variants={itemVariants} className="flex flex-col gap-2">
             <label className="flex items-center gap-1.5 text-sm font-semibold text-gray-700">
               <Layers className="w-3.5 h-3.5 text-green-500" />

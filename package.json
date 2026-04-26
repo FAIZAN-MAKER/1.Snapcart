@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "dev": "./node_modules/.bin/next dev",
+    "build": "./node_modules/.bin/next build",
+    "start": "./node_modules/.bin/next start",
+    "lint": "./node_modules/.bin/next lint"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.5.1",
@@ -14,20 +14,21 @@
     "axios": "^1.7.9",
     "bcryptjs": "^3.0.2",
     "cloudinary": "^2.5.1",
+    "framer-motion": "^12.38.0",
     "leaflet": "^1.9.4",
     "leaflet-geosearch": "^4.0.0",
-    "lucide-react": "^0.475.0",
+    "lucide-react": "^1.11.0",
     "mongoose": "^8.10.0",
-    "motion": "^12.4.3",
+    "motion": "^12.38.0",
     "next": "15.1.7",
     "next-auth": "5.0.0-beta.25",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
     "react-leaflet": "^5.0.0",
     "react-redux": "^9.2.0",
-    "socket.io-client": "^4.8.1",
-    "stripe": "^17.6.0",
-    "zod": "^3.24.2"
+    "socket.io-client": "^4.8.3",
+    "stripe": "^22.1.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.0.0",

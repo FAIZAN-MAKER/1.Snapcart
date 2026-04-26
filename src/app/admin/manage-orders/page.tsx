@@ -36,8 +36,15 @@ interface Order {
   paymentMethod: "cod" | "online"
   isPaid?: boolean
   address: OrderAddress
-  status: "pending" | "out for delivery" | "delivered"
+  status: "pending" | "accepted" | "out for delivery" | "delivered"
   createdAt: string
+  assignedDeliveryBoy?: {
+    _id: string
+    name: string
+    email: string
+    image?: string
+    mobile?: string
+  }
 }
 
 const containerVariants = {
@@ -219,6 +226,8 @@ const ManageOrdersPage = () => {
                         <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
                           order.status === "pending"
                             ? "bg-yellow-100 text-yellow-700"
+                            : order.status === "accepted"
+                            ? "bg-purple-100 text-purple-700"
                             : order.status === "out for delivery"
                             ? "bg-blue-100 text-blue-700"
                             : "bg-green-100 text-green-700"
@@ -327,6 +336,7 @@ const ManageOrdersPage = () => {
                               disabled={updatingStatus === order._id}
                             >
                               <option value="pending">Pending</option>
+                              <option value="accepted">Accepted</option>
                               <option value="out for delivery">Out for Delivery</option>
                               <option value="delivered">Delivered</option>
                             </select>

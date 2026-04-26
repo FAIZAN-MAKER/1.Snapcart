@@ -27,7 +27,7 @@ interface IOrder {
   };
   assigment?: mongoose.Types.ObjectId;
   assignedDeliveryBoy?: mongoose.Types.ObjectId;
-  status: "pending" | "out for delivery" | "delivered";
+  status: "pending" | "accepted" | "out for delivery" | "delivered";
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -66,7 +66,7 @@ const orderSchema = new mongoose.Schema<IOrder>(
     assigment: { type: mongoose.Schema.Types.ObjectId, ref: "DeliveryAssignment" },
     status: {
       type: String,
-      enum: ["pending", "out for delivery", "delivered"],
+      enum: ["pending", "accepted", "out for delivery", "delivered"],
       default: "pending",
     },
   },

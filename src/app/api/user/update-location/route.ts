@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { User } from "@/models/user.model";
-import { connectDB } from "@/lib/db";
+import connectDb from "@/lib/db";
 
 export async function POST(req: Request) {
   try {
@@ -16,7 +16,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid coordinates" }, { status: 400 });
     }
 
-    await connectDB();
+    await connectDb();
 
     await User.findByIdAndUpdate(session.user.id, {
       location: {

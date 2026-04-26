@@ -1,14 +1,17 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft, MapPin, Package, ShoppingBag, CreditCard,
   Banknote, Clock, Truck, CheckCircle2, ChevronDown, ChevronUp,
+  Navigation,
 } from "lucide-react";
 import axios from "axios";
+import { getSocket } from "@/lib/socket";
+import { useRouter } from "next/navigation";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface OrderItem {
@@ -27,6 +30,8 @@ interface OrderAddress {
   state: string;
   pinCode: string;
   fullAddress: string;
+  latitude?: number;
+  longitude?: number;
 }
 
 interface Order {
@@ -37,9 +42,16 @@ interface Order {
   paymentMethod: "cod" | "online";
   isPaid: boolean;
   address: OrderAddress;
-  status: "pending" | "out for delivery" | "delivered";
+  status: "pending" | "accepted" | "out for delivery" | "delivered";
   createdAt: string;
   updatedAt: string;
+  assignedDeliveryBoy?: {
+    _id: string;
+    name: string;
+    email: string;
+    image?: string;
+    mobile?: string;
+  };
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -56,6 +68,13 @@ const statusConfig = {
     dot: "bg-amber-500",
     icon: Clock,
   },
+  accepted: {
+    label: "Accepted",
+    bg: "bg-purple-100",
+    text: "text-purple-700",
+    dot: "bg-purple-500",
+    icon: Truck,
+  },
   "out for delivery": {
     label: "Out for Delivery",
     bg: "bg-blue-100",
@@ -70,6 +89,30 @@ const statusConfig = {
     dot: "bg-green-500",
     icon: CheckCircle2,
   },
+};
+
+// ─── Delivery Boy Badge ───────────────────────────────────────────────
+const DeliveryBoyBadge = ({ deliveryBoy }: { deliveryBoy?: Order["assignedDeliveryBoy"] }) => {
+  if (!deliveryBoy) return null;
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      className="flex items-center gap-2 px-3 py-2 bg-purple-50 border border-purple-200 rounded-xl"
+    >
+      {deliveryBoy.image ? (
+        <img src={deliveryBoy.image} alt={deliveryBoy.name} className="w-8 h-8 rounded-full object-cover" />
+      ) : (
+        <div className="w-8 h-8 rounded-full bg-purple-200 flex items-center justify-center">
+          <Truck className="w-4 h-4 text-purple-600" />
+        </div>
+      )}
+      <div>
+        <p className="text-xs font-semibold text-purple-700">Delivery Partner</p>
+        <p className="text-xs text-purple-600">{deliveryBoy.name}</p>
+      </div>
+    </motion.div>
+  );
 };
 
 // ─── Status Badge ─────────────────────────────────────────────────────────────
@@ -115,6 +158,8 @@ const OrderCard = ({ order, index }: { order: Order; index: number }) => {
         {/* Badges row */}
         <div className="flex flex-wrap gap-2 mb-4">
           <StatusBadge status={order.status} />
+
+          <DeliveryBoyBadge deliveryBoy={order.assignedDeliveryBoy} />
 
           <span className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full ${
             order.isPaid ? "bg-green-100 text-green-700" : "bg-red-100 text-red-600"
@@ -305,6 +350,17 @@ export default function MyOrdersPage() {
       }
     };
     fetchOrders();
+
+    const socket = getSocket();
+    
+    socket.on("order-status-changed", (data: { orderId: string; status: string }) => {
+      console.log("Real-time order update:", data);
+      fetchOrders();
+    });
+
+    return () => {
+      socket.off("order-status-changed");
+    };
   }, []);
 
   return (
