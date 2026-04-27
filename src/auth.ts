@@ -46,30 +46,33 @@ const authConfig: NextAuthConfig = {
   ],
   callbacks: {
     async signIn({ user, account }) {
-      if (account?.provider === "google") {
-        try {
-          await connectDb();
-          const existingUser = await User.findOne({ email: user.email }).lean();
+  if (account?.provider === "google") {
+    try {
+      await connectDb();
 
-          if (!existingUser) {
-            const newUser = await User.create({
-              name: user.name,
-              email: user.email,
-              image: user.image,
-              role: "user", 
-            });
-            user.id = newUser._id.toString();
-            user.role = newUser.role;
-          } else {
-            user.id = existingUser._id.toString();
-            user.role = existingUser.role;
-          }
-        } catch (error) {
-          return false;
-        }
+      const existingUser = await User.findOne({ email: user.email });
+
+      if (!existingUser) {
+        const newUser = await User.create({
+          name: user.name,
+          email: user.email,
+          image: user.image,
+          role: "user",
+        });
+
+        user.id = newUser._id.toString();
+        user.role = newUser.role;
+      } else {
+        user.id = existingUser._id.toString();
+        user.role = existingUser.role;
       }
-      return true;
-    },
+    } catch (error) {
+      return false;
+    }
+  }
+
+  return true;
+},
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;

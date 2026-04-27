@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, type Variants } from 'framer-motion'
 import {
   ArrowLeft, ShoppingBag, Clock, User, Phone, MapPin,
   CreditCard, Package, ChevronDown, ChevronUp, Loader2,
@@ -47,14 +47,14 @@ interface Order {
   }
 }
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   show: { opacity: 1, transition: { staggerChildren: 0.05, delayChildren: 0.1 } },
 }
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 16 },
-  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 14 } },
+  show: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 100, damping: 14 } },
 }
 
 const ManageOrdersPage = () => {
