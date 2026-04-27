@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { use } from "react";
 
 interface IOrder {
   _id?: mongoose.Types.ObjectId;
@@ -34,7 +33,7 @@ interface IOrder {
 
 const orderSchema = new mongoose.Schema<IOrder>(
   {
-    user: { type: mongoose.Types.ObjectId, ref: "User", required: true },
+    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     items: [
       {
         grocery: {

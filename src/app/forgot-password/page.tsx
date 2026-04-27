@@ -12,13 +12,13 @@ const ForgotPassword = () => {
         className="w-full max-w-md flex flex-col items-center text-center gap-6"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ type: "spring", stiffness: 100, damping: 16 }}
+        transition={{ type: "spring" as const, stiffness: 100, damping: 16 }}
       >
         <motion.div
           className="w-24 h-24 rounded-3xl bg-gray-100 flex items-center justify-center"
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
-          transition={{ type: "spring", stiffness: 150, damping: 14, delay: 0.1 }}
+          transition={{ type: "spring" as const, stiffness: 150, damping: 14, delay: 0.1 }}
         >
           <Lock className="w-12 h-12 text-gray-400" />
         </motion.div>

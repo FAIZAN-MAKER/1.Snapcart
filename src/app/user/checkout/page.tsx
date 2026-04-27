@@ -7,6 +7,7 @@ import {
   ArrowLeft, MapPin, User, Phone,
   CreditCard, Banknote, ShoppingBag, Truck, ChevronRight,
   CheckCircle2,
+  Loader2,
 } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
@@ -212,7 +213,7 @@ const CheckoutPage = () => {
 
         <motion.div className="flex items-center gap-4 mb-8"
           initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }}
-          transition={{ type: "spring", stiffness: 120, damping: 16 }}
+          transition={{ type: "spring" as const, stiffness: 120, damping: 16 }}
         >
           <Link href="/user/cart">
             <motion.button whileHover={{ x: -3 }} whileTap={{ scale: 0.95 }}

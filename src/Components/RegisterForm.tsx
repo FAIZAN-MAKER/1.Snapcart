@@ -83,7 +83,7 @@ const RegisterForm = ({ prevStep }: { prevStep: (step: number) => void }) => {
     const result = registerSchema.safeParse(form)
     if (!result.success) {
       const fieldErrors: FieldErrors = {}
-      result.error?.errors?.forEach((err) => {
+result.error?.issues?.forEach((err) => {
         const field = err.path[0] as keyof RegisterFormData
         if (!fieldErrors[field]) fieldErrors[field] = err.message
       })
@@ -110,7 +110,7 @@ const RegisterForm = ({ prevStep }: { prevStep: (step: number) => void }) => {
 
   const itemVariants = {
     hidden: { opacity: 0, y: 16 },
-    show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 16 } },
+    show: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 100, damping: 16 } },
   }
 
   if (success) {
@@ -120,7 +120,7 @@ const RegisterForm = ({ prevStep }: { prevStep: (step: number) => void }) => {
           className="w-full max-w-md text-center flex flex-col items-center gap-6"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ type: "spring", stiffness: 120, damping: 16 }}
+          transition={{ type: "spring" as const, stiffness: 120, damping: 16 }}
         >
           <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center">
             <motion.svg

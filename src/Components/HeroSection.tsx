@@ -93,7 +93,7 @@ const HeroSection = () => {
           initial="enter"
           animate="center"
           exit="exit"
-          transition={{ type: "spring", stiffness: 80, damping: 20 }}
+          transition={{ type: "spring" as const, stiffness: 80, damping: 20 }}
           className="absolute inset-0"
         >
           <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${slide.bg})` }} />
@@ -104,7 +104,7 @@ const HeroSection = () => {
             <motion.div
               initial={{ scale: 0, rotate: -20 }}
               animate={{ scale: 1, rotate: 0 }}
-              transition={{ type: "spring", stiffness: 180, damping: 14, delay: 0.15 }}
+              transition={{ type: "spring" as const, stiffness: 180, damping: 14, delay: 0.15 }}
             >
               {slide.icon}
             </motion.div>

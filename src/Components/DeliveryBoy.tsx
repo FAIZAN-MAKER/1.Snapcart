@@ -94,7 +94,7 @@ function itemSubtotal(item: OrderItem): number {
 
 const fadeUp = {
   hidden: { opacity: 0, y: 16 },
-  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 140, damping: 18 } },
+show: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 140, damping: 18 } },
 };
 
 const stagger = {
@@ -122,7 +122,7 @@ function NotificationToast({ notification }: { notification: Notification }) {
       initial={{ opacity: 0, y: -24, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: -16, scale: 0.95 }}
-      transition={{ type: "spring", stiffness: 200, damping: 20 }}
+      transition={{ type: "spring" as const, stiffness: 200, damping: 20 }}
       className={`fixed top-5 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2.5 px-5 py-3 rounded-2xl shadow-xl text-sm font-semibold ${styles[notification.type]}`}
     >
       {icons[notification.type]}

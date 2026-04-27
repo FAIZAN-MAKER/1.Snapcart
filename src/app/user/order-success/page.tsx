@@ -178,7 +178,7 @@ const OrderSuccessPage = () => {
             className="relative z-10 flex flex-col items-center text-center max-w-md w-full gap-8"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ type: "spring", stiffness: 80, damping: 16 }}
+            transition={{ type: "spring" as const, stiffness: 80, damping: 16 }}
           >
 
             {/* Check icon with orbiting dots + pulse rings */}
@@ -206,12 +206,12 @@ const OrderSuccessPage = () => {
                 className="relative w-32 h-32 rounded-full bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center shadow-2xl shadow-green-500/40"
                 initial={{ scale: 0, rotate: -180 }}
                 animate={{ scale: 1, rotate: 0 }}
-                transition={{ type: "spring", stiffness: 150, damping: 12, delay: 0.1 }}
+                transition={{ type: "spring" as const, stiffness: 150, damping: 12, delay: 0.1 }}
               >
                 <motion.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
-                  transition={{ delay: 0.4, type: "spring", stiffness: 200 }}
+                  transition={{ delay: 0.4, type: "spring" as const, stiffness: 200 }}
                 >
                   <CheckCircle2 className="w-16 h-16 text-white drop-shadow-lg" strokeWidth={2} />
                 </motion.div>
@@ -252,7 +252,7 @@ const OrderSuccessPage = () => {
                   className="bg-white/5 border border-white/10 rounded-2xl p-3 flex flex-col items-center gap-1 backdrop-blur-sm"
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.75 + i * 0.1, type: "spring", stiffness: 120 }}
+                  transition={{ delay: 0.75 + i * 0.1, type: "spring" as const, stiffness: 120 }}
                   whileHover={{ scale: 1.04, background: "rgba(255,255,255,0.08)" }}
                 >
                   <span className="text-2xl">{card.emoji}</span>

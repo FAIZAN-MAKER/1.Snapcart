@@ -161,7 +161,7 @@ const ManageOrdersPage = () => {
             <motion.div
               className="w-12 h-12 rounded-2xl bg-green-500 flex items-center justify-center shadow-lg shadow-green-200 shrink-0"
               whileHover={{ rotate: -6, scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 300 }}
+              transition={{ type: "spring" as const, stiffness: 300 }}
             >
               <ShoppingBag className="w-6 h-6 text-white" />
             </motion.div>

@@ -11,7 +11,7 @@ import {
   SearchX,
   ShoppingBag,
 } from "lucide-react";
-import { IGrocery } from "../redux/cartSlice";
+import { IGrocery } from "@/redux/cartSlice";
 import GroceryItemCard from "@/Components/GroceryItemCard";
 import Nav from "@/Components/Nav";
 import Footer from "@/Components/Footer";

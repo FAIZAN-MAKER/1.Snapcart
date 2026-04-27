@@ -8,7 +8,7 @@ import { User } from "./models/user.model";
 
 const credentialsSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(6),
+  password: z.string().min(1),
 });
 
 const authConfig: NextAuthConfig = {
@@ -22,7 +22,7 @@ const authConfig: NextAuthConfig = {
 
         try {
           await connectDb();
-          const user = await User.findOne({ email }).select("+password").lean();
+const user = await User.findOne({ email }).select("+password").lean<{ _id: any; email: string; name: string; role: string; password: string }>();
           if (!user || !user.password) return null;
 
           const isMatch = await bcrypt.compare(password, user.password);
@@ -32,7 +32,7 @@ const authConfig: NextAuthConfig = {
             id: user._id.toString(),
             email: user.email,
             name: user.name,
-            role: user.role, 
+            role: user.role,
           };
         } catch (error) {
           return null;
@@ -46,33 +46,33 @@ const authConfig: NextAuthConfig = {
   ],
   callbacks: {
     async signIn({ user, account }) {
-  if (account?.provider === "google") {
-    try {
-      await connectDb();
+      if (account?.provider === "google") {
+        try {
+          await connectDb();
 
-      const existingUser = await User.findOne({ email: user.email });
+          const existingUser = await User.findOne({ email: user.email });
 
-      if (!existingUser) {
-        const newUser = await User.create({
-          name: user.name,
-          email: user.email,
-          image: user.image,
-          role: "user",
-        });
+          if (!existingUser) {
+            const newUser = await User.create({
+              name: user.name,
+              email: user.email,
+              image: user.image,
+              role: "user",
+            });
 
-        user.id = newUser._id.toString();
-        user.role = newUser.role;
-      } else {
-        user.id = existingUser._id.toString();
-        user.role = existingUser.role;
+            user.id = newUser._id.toString();
+            user.role = newUser.role;
+          } else {
+            user.id = existingUser._id.toString();
+            user.role = existingUser.role;
+          }
+        } catch (error) {
+          return false;
+        }
       }
-    } catch (error) {
-      return false;
-    }
-  }
 
-  return true;
-},
+      return true;
+    },
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;

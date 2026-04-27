@@ -250,7 +250,7 @@ const OrderCard = ({ order, index }: { order: Order; index: number }) => {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ type: "spring", stiffness: 200, damping: 24 }}
+            transition={{ type: "spring" as const, stiffness: 200, damping: 24 }}
             className="overflow-hidden border-t border-gray-100"
           >
             <div className="px-5 sm:px-6 py-4 space-y-2 bg-gray-50/50">
@@ -392,7 +392,7 @@ export default function MyOrdersPage() {
           className="flex items-center gap-4 mb-8"
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ type: "spring", stiffness: 120, damping: 16 }}
+          transition={{ type: "spring" as const, stiffness: 120, damping: 16 }}
         >
           <Link href="/">
             <motion.button

@@ -41,7 +41,7 @@ const containerVariants = {
 
 const itemVariants = {
   hidden: { opacity: 0, y: 28 },
-  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 90, damping: 15 } },
+  show: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 90, damping: 15 } },
 }
 
 // ─── Field Wrapper ────────────────────────────────────────────────────────────
@@ -108,7 +108,7 @@ const CustomSelect = ({
             initial={{ opacity: 0, y: -8, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8, scale: 0.97 }}
-            transition={{ type: "spring", stiffness: 300, damping: 25 }}
+            transition={{ type: "spring" as const, stiffness: 300, damping: 25 }}
           >
             {normalized.map((opt, i) => (
               <motion.li key={opt.value}
@@ -157,7 +157,7 @@ const ImageUpload = ({
           <motion.div key="preview"
             className="relative rounded-2xl overflow-hidden border-2 border-green-300 shadow-md shadow-green-100"
             initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }} transition={{ type: "spring", stiffness: 200, damping: 20 }}
+            exit={{ opacity: 0, scale: 0.95 }} transition={{ type: "spring" as const, stiffness: 200, damping: 20 }}
           >
             <img src={preview} alt="Preview" className="w-full h-52 object-cover" />
             <div className="absolute inset-0 bg-black/0 hover:bg-black/35 transition-all duration-200 flex items-center justify-center group">
@@ -190,7 +190,7 @@ const ImageUpload = ({
               <motion.div
                 className={`w-16 h-16 rounded-2xl flex items-center justify-center transition-colors ${dragging ? "bg-green-100" : "bg-gray-100"}`}
                 animate={dragging ? { scale: 1.12, rotate: -6 } : { scale: 1, rotate: 0 }}
-                transition={{ type: "spring", stiffness: 300 }}
+                transition={{ type: "spring" as const, stiffness: 300 }}
               >
                 <ImagePlus className={`w-7 h-7 transition-colors ${dragging ? "text-green-500" : "text-gray-400"}`} />
               </motion.div>
@@ -304,12 +304,12 @@ const AddGroceryPage = () => {
       <div className="min-h-screen flex items-center justify-center px-6">
         <motion.div className="flex flex-col items-center gap-7 text-center max-w-sm w-full"
           initial={{ opacity: 0, scale: 0.85 }} animate={{ opacity: 1, scale: 1 }}
-          transition={{ type: "spring", stiffness: 120, damping: 16 }}
+          transition={{ type: "spring" as const, stiffness: 120, damping: 16 }}
         >
           <motion.div
             className="w-28 h-28 rounded-3xl bg-green-100 flex items-center justify-center shadow-lg shadow-green-200"
             initial={{ scale: 0, rotate: -20 }} animate={{ scale: 1, rotate: 0 }}
-            transition={{ type: "spring", stiffness: 150, damping: 14, delay: 0.1 }}
+            transition={{ type: "spring" as const, stiffness: 150, damping: 14, delay: 0.1 }}
           >
             <CheckCircle2 className="w-14 h-14 text-green-500" />
           </motion.div>
@@ -363,7 +363,7 @@ const AddGroceryPage = () => {
             <motion.div
               className="w-14 h-14 rounded-2xl bg-green-500 flex items-center justify-center shadow-lg shadow-green-200 shrink-0"
               whileHover={{ rotate: -8, scale: 1.08 }}
-              transition={{ type: "spring", stiffness: 300 }}
+              transition={{ type: "spring" as const, stiffness: 300 }}
             >
               <ShoppingBasket className="w-7 h-7 text-white" />
             </motion.div>

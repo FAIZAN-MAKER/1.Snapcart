@@ -9,7 +9,6 @@ import { useRouter } from 'next/navigation'
 import { z } from 'zod'
 import Button from '@/Components/ui/Button'
 
-// ─── Zod Schema ───────────────────────────────────────────────────────────────
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email address."),
   password: z.string().min(1, "Password is required."),
@@ -18,7 +17,6 @@ const loginSchema = z.object({
 type LoginFormData = z.infer<typeof loginSchema>
 type FieldErrors = Partial<Record<keyof LoginFormData, string>>
 
-// ─── Field Component ─────────────────────────────────────────────────────────
 const Field = ({
   label,
   icon: Icon,
@@ -56,7 +54,6 @@ const Field = ({
   </div>
 )
 
-// ─── Main Component ───────────────────────────────────────────────────────────
 const LoginPage = () => {
   const router = useRouter()
   const [form, setForm] = useState<LoginFormData>({ email: "", password: "" })
@@ -80,7 +77,7 @@ const LoginPage = () => {
     const result = loginSchema.safeParse(form)
     if (!result.success) {
       const fieldErrors: FieldErrors = {}
-      result.error.errors.forEach((err) => {
+      result.error.issues.forEach((err) => {
         const field = err.path[0] as keyof LoginFormData
         if (!fieldErrors[field]) fieldErrors[field] = err.message
       })
@@ -101,7 +98,7 @@ const LoginPage = () => {
         return
       }
 
-      router.push("/") // redirect to home on success
+      router.push("/")
       router.refresh()
     } catch {
       setServerError("Something went wrong. Please try again.")
@@ -117,7 +114,7 @@ const LoginPage = () => {
 
   const itemVariants = {
     hidden: { opacity: 0, y: 16 },
-    show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 16 } },
+    show: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 100, damping: 16 } },
   }
 
   return (
@@ -128,7 +125,6 @@ const LoginPage = () => {
         initial="hidden"
         animate="show"
       >
-        {/* Logo */}
         <motion.div variants={itemVariants} className="flex flex-col items-center gap-3">
           <div className="w-16 h-16 rounded-2xl bg-green-500 flex items-center justify-center shadow-lg shadow-green-200">
             <ShoppingBasket className="text-white w-8 h-8" />
@@ -139,7 +135,6 @@ const LoginPage = () => {
           </div>
         </motion.div>
 
-        {/* Form */}
         <motion.form
           variants={itemVariants}
           onSubmit={handleLogin}
@@ -176,14 +171,12 @@ const LoginPage = () => {
             </button>
           </Field>
 
-          {/* Forgot password */}
           <div className="flex justify-end -mt-2">
             <Link href="/forgot-password" className="text-green-600 text-xs hover:underline font-medium">
               Forgot password?
             </Link>
           </div>
 
-          {/* Server error */}
           <AnimatePresence>
             {serverError && (
               <motion.div
@@ -197,26 +190,22 @@ const LoginPage = () => {
             )}
           </AnimatePresence>
 
-          {/* Submit */}
           <Button type="submit" isLoading={isLoading} size="lg" className="mt-1">
             Sign In
           </Button>
 
-          {/* Divider */}
           <div className="flex items-center gap-3 my-1">
             <div className="flex-1 h-px bg-gray-200" />
             <span className="text-gray-400 text-xs">or</span>
             <div className="flex-1 h-px bg-gray-200" />
           </div>
 
-          {/* Google placeholder */}
           <Button type="button" variant="secondary" onClick={() => signIn("google", { callbackUrl: "/" })}>
             <img src="/google.png" alt="Google" className="w-5 h-5" />
             Continue with Google
           </Button>
         </motion.form>
 
-        {/* Register link */}
         <motion.p variants={itemVariants} className="text-center text-sm text-gray-500">
           Don't have an account?{" "}
           <Link href="/register" className="text-green-600 font-semibold hover:underline">

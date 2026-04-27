@@ -49,7 +49,7 @@ const containerVariants = {
 
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 16 } },
+  show: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 100, damping: 16 } },
 }
 
 // ─── Main Component ───────────────────────────────────────────────────────────
@@ -122,7 +122,7 @@ const EditRoleMobile = () => {
           className="flex flex-col items-center gap-5 text-center"
           initial={{ opacity: 0, scale: 0.85 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ type: "spring", stiffness: 120, damping: 16 }}
+          transition={{ type: "spring" as const, stiffness: 120, damping: 16 }}
         >
           <div className="w-24 h-24 rounded-full bg-green-100 flex items-center justify-center">
             <CheckCircle2 className="w-12 h-12 text-green-500" />
@@ -204,7 +204,7 @@ const EditRoleMobile = () => {
                         initial={{ scale: 0, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         exit={{ scale: 0, opacity: 0 }}
-                        transition={{ type: "spring", stiffness: 200, damping: 15 }}
+                        transition={{ type: "spring" as const, stiffness: 200, damping: 15 }}
                       >
                         <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0" />
                       </motion.div>

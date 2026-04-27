@@ -176,7 +176,7 @@ const CategorySlider = ({ onCategorySelect }: CategorySliderProps) => {
           <motion.div
             className="flex gap-3 sm:gap-5"
             animate={{ x: `-${currentIndex * (100 / itemsPerView)}%` }}
-            transition={{ type: "spring", stiffness: 120, damping: 20 }}
+            transition={{ type: "spring" as const, stiffness: 120, damping: 20 }}
           >
             {categories.map((category) => (
               <div

@@ -23,7 +23,7 @@ interface IUser {
   image?: string;
 }
 
-const useClickOutside = (ref: React.RefObject<HTMLElement>, handler: () => void) => {
+const useClickOutside = (ref: React.RefObject<HTMLDivElement | null>, handler: () => void) => {
   useEffect(() => {
     const listener = (e: MouseEvent | TouchEvent) => {
       if (!ref.current || ref.current.contains(e.target as Node)) return;
@@ -124,7 +124,7 @@ const AdminSidebar = ({ user, open, onClose }: { user: IUser | null; open: boole
           <motion.div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} />
           <motion.aside className="fixed top-0 right-0 h-full w-[300px] bg-white z-50 flex flex-col shadow-2xl"
             initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }}
-            transition={{ type: "spring", stiffness: 280, damping: 28 }}
+            transition={{ type: "spring" as const, stiffness: 280, damping: 28 }}
           >
             <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
               <div className="flex items-center gap-2">
@@ -136,23 +136,23 @@ const AdminSidebar = ({ user, open, onClose }: { user: IUser | null; open: boole
               </motion.button>
             </div>
             <div className="mx-4 mt-4 mb-2 p-4 rounded-2xl bg-gradient-to-br from-green-50 to-emerald-50 border border-green-100">
-              <div className="flex items-center gap-3">
-                {user.image ? (
-                  <Image src={user.image} alt={user.name} width={48} height={48} className="w-12 h-12 rounded-xl object-cover ring-2 ring-green-200" />
-                ) : (
-                  <div className="w-12 h-12 rounded-xl bg-green-500 flex items-center justify-center text-white font-bold text-base ring-2 ring-green-200">{initials}</div>
-                )}
-                <div className="min-w-0 flex-1">
-                  <p className="font-bold text-gray-900 text-sm truncate">{user.name}</p>
-                  <p className="text-gray-500 text-xs truncate mt-0.5">{user.email}</p>
-                  <span className="inline-block mt-1.5 text-[10px] font-semibold uppercase tracking-wider bg-green-500 text-white px-2 py-0.5 rounded-full">Admin</span>
-                </div>
-              </div>
+  <div className="flex items-center gap-3">
+    {user?.image ? (
+      <Image src={user.image} alt={user?.name ?? ""} width={48} height={48} className="w-12 h-12 rounded-xl object-cover ring-2 ring-green-200" />
+    ) : (
+      <div className="w-12 h-12 rounded-xl bg-green-500 flex items-center justify-center text-white font-bold text-base ring-2 ring-green-200">{initials}</div>
+    )}
+    <div className="min-w-0 flex-1">
+      <p className="font-bold text-gray-900 text-sm truncate">{user?.name}</p>
+      <p className="text-gray-500 text-xs truncate mt-0.5">{user?.email}</p>
+      <span className="inline-block mt-1.5 text-[10px] font-semibold uppercase tracking-wider bg-green-500 text-white px-2 py-0.5 rounded-full">Admin</span>
+    </div>
+  </div>
             </div>
             <nav className="flex-1 px-3 py-3 space-y-1 overflow-y-auto">
               <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest px-3 mb-2">Management</p>
               {adminLinks.map(({ href, icon: Icon, label, desc }, i) => (
-                <motion.div key={href} initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.04 * i, type: "spring", stiffness: 220, damping: 22 }}>
+                <motion.div key={href} initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.04 * i, type: "spring" as const, stiffness: 220, damping: 22 }}>
                   <Link href={href} onClick={onClose}>
                     <motion.div className="flex items-center gap-3 px-3 py-3 rounded-2xl text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors group" whileHover={{ x: 3 }} whileTap={{ scale: 0.98 }}>
                       <div className="w-10 h-10 rounded-xl bg-gray-100 group-hover:bg-green-100 flex items-center justify-center shrink-0 transition-colors">
@@ -201,7 +201,7 @@ const CartBadge = () => {
               key={count}
               className="absolute -top-1.5 -right-1.5 bg-white text-emerald-600 text-[10px] font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1 shadow-md"
               initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}
-              transition={{ type: "spring", stiffness: 500 }}
+              transition={{ type: "spring" as const, stiffness: 500 }}
             >
               {count > 99 ? "99+" : count}
             </motion.span>
@@ -212,7 +212,7 @@ const CartBadge = () => {
   );
 };
 
-const Nav = ({ user }: { user: IUser }) => {
+const Nav = ({ user }: { user: IUser | null }) => {
   const router = useRouter();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -266,7 +266,7 @@ const Nav = ({ user }: { user: IUser }) => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-4">
 
             <Link href="/" className="flex items-center gap-2.5 shrink-0 group" aria-label="SnapCart Home">
-              <motion.div className="w-10 h-10 bg-white/95 rounded-xl flex items-center justify-center shadow-sm ring-2 ring-white/20" whileHover={{ rotate: -12, scale: 1.1 }} whileTap={{ scale: 0.95 }} transition={{ type: "spring", stiffness: 400, damping: 17 }}>
+              <motion.div className="w-10 h-10 bg-white/95 rounded-xl flex items-center justify-center shadow-sm ring-2 ring-white/20" whileHover={{ rotate: -12, scale: 1.1 }} whileTap={{ scale: 0.95 }} transition={{ type: "spring" as const, stiffness: 400, damping: 17 }}>
                 <ShoppingBasket className="w-5 h-5 text-green-600" />
               </motion.div>
               <span className="text-white font-bold text-xl tracking-tight hidden sm:block group-hover:tracking-wider transition-all duration-300">SnapCart</span>
@@ -329,14 +329,14 @@ const Nav = ({ user }: { user: IUser }) => {
                   {dropdownOpen && (
                     <motion.div className="absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-2xl shadow-black/15 border border-gray-100 overflow-hidden z-50 origin-top-right"
                       initial={{ opacity: 0, scale: 0.95, y: -10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                      transition={{ type: "spring", stiffness: 300, damping: 25 }} role="menu"
+                      transition={{ type: "spring" as const, stiffness: 300, damping: 25 }} role="menu"
                     >
                       <div className="px-4 py-4 border-b border-gray-100 bg-gradient-to-br from-green-50 to-emerald-50/50">
                         <div className="flex items-center gap-3">
                           <Avatar user={user} size="md" />
                           <div className="min-w-0 flex-1">
-                            <p className="font-semibold text-gray-900 text-sm truncate">{user.name}</p>
-                            <p className="text-xs text-gray-500 truncate mt-0.5">{user.email}</p>
+                           <p className="font-semibold text-gray-900 text-sm truncate">{user?.name}</p>
+<p className="text-xs text-gray-500 truncate mt-0.5">{user?.email}</p>
                           </div>
                         </div>
                         <span className="inline-flex mt-3 text-[10px] font-semibold uppercase tracking-wider bg-green-100 text-green-700 px-2.5 py-1 rounded-full">
@@ -364,7 +364,7 @@ const Nav = ({ user }: { user: IUser }) => {
           {isUser && (
             <AnimatePresence>
               {searchOpen && (
-                <motion.div className="md:hidden px-4 pb-4" initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ type: "spring", stiffness: 300, damping: 25 }}>
+                <motion.div className="md:hidden px-4 pb-4" initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ type: "spring" as const, stiffness: 300, damping: 25 }}>
                   <form className="flex items-center gap-3 bg-white/10 border border-white/20 rounded-2xl px-4 py-3" onSubmit={handleMobileSearchSubmit}>
                     <Search className="w-5 h-5 text-white/70 shrink-0" />
                     <input ref={searchRef} type="text" placeholder="Search groceries..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="flex-1 bg-transparent outline-none text-white placeholder:text-white/50 text-base min-w-0" />

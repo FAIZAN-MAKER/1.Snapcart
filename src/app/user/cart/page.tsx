@@ -65,7 +65,7 @@ const CartItem = ({ item }: { item: ReturnType<typeof selectCartItems>[number] }
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, x: -40, scale: 0.95 }}
-      transition={{ type: "spring", stiffness: 200, damping: 22 }}
+      transition={{ type: "spring" as const, stiffness: 200, damping: 22 }}
       className="bg-white rounded-3xl p-4 sm:p-5 flex flex-col sm:flex-row items-center gap-5 shadow-sm border border-gray-100 hover:shadow-md hover:border-green-100 transition-all duration-300 group"
     >
       {/* Image */}
@@ -166,7 +166,7 @@ const CartPage = () => {
           className="flex items-center justify-between mb-8"
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ type: "spring", stiffness: 120, damping: 16 }}
+          transition={{ type: "spring" as const, stiffness: 120, damping: 16 }}
         >
           <Link href="/">
             <motion.button
@@ -230,7 +230,7 @@ const CartPage = () => {
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.1, type: "spring", stiffness: 120, damping: 16 }}
+              transition={{ delay: 0.1, type: "spring" as const, stiffness: 120, damping: 16 }}
               className="bg-gray-900 text-white rounded-[2.5rem] p-8 shadow-2xl overflow-hidden relative"
             >
               {/* BG glow */}
