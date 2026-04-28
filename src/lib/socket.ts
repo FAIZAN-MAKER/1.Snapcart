@@ -1,15 +1,22 @@
-import { io, Socket } from "socket.io-client"
+import { io, Socket } from "socket.io-client";
 
-let socket: Socket | null = null
+let socket: Socket | null = null;
 
 export const getSocket = () => {
-    if (!process.env.NEXT_PUBLIC_SOCKET_SERVER_URL) {
-        throw new Error("Socket URL not defined")
-    }
+  if (typeof window === "undefined") return null;
 
-    if (!socket) {
-        socket = io(process.env.NEXT_PUBLIC_SOCKET_SERVER_URL)
-    }
+  const url = process.env.NEXT_PUBLIC_SOCKET_SERVER_URL;
 
-    return socket
-}
+  if (!url) {
+    console.error("Socket URL not defined");
+    return null;
+  }
+
+  if (!socket) {
+    socket = io(url, {
+      transports: ["websocket"],
+    });
+  }
+
+  return socket;
+};
