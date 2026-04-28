@@ -1,27 +1,32 @@
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function proxy(req: NextRequest) {
+export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   const publicRoutes = ["/login", "/register", "/api/auth"];
+
   const isPublicRoute = publicRoutes.some((route) =>
-    pathname.startsWith(route),
+    pathname.startsWith(route)
   );
 
-  if (isPublicRoute) {
-    return NextResponse.next();
-  }
+  if (isPublicRoute) return NextResponse.next();
 
-  const token = await getToken({ req, secret: process.env.AUTH_SECRET });
+  const token = await getToken({
+    req,
+    secret: process.env.AUTH_SECRET,
+  });
 
   if (!token) {
     const loginUrl = new URL("/login", req.url);
-    loginUrl.searchParams.set("callbackUrl", req.url);
+
+    // FIX: only send pathname, not full URL
+    loginUrl.searchParams.set("callbackUrl", pathname);
+
     return NextResponse.redirect(loginUrl);
   }
 
-  const role = token.role;
+  const role = token.role as string;
 
   if (pathname.startsWith("/admin") && role !== "admin") {
     return NextResponse.redirect(new URL("/unauthorized", req.url));
@@ -31,10 +36,7 @@ export async function proxy(req: NextRequest) {
     return NextResponse.redirect(new URL("/unauthorized", req.url));
   }
 
-  if (
-    pathname.startsWith("/user") &&
-    !["user", "admin"].includes(role as string)
-  ) {
+  if (pathname.startsWith("/user") && !["user", "admin"].includes(role)) {
     return NextResponse.redirect(new URL("/unauthorized", req.url));
   }
 
