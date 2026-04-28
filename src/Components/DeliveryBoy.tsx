@@ -400,13 +400,15 @@ export default function DeliveryBoy({ user }: DeliveryBoyProps) {
   }, [fetchOrders]);
 
   useEffect(() => {
-    const socket = getSocket();
-    socket.emit("join-delivery-room");
-    socket.on("order-status-changed", fetchOrders);
-    return () => {
-      socket.off("order-status-changed", fetchOrders);
-    };
-  }, [fetchOrders]);
+  const socket = getSocket();
+  if (!socket) return;
+  
+  socket.emit("join-delivery-room");
+  socket.on("order-status-changed", fetchOrders);
+  return () => {
+    socket.off("order-status-changed", fetchOrders);
+  };
+}, [fetch
 
   // ── Notifications ──
 
