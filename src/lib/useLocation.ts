@@ -28,7 +28,7 @@ export const useLocationSender = ({
     async (latitude: number, longitude: number) => {
       const socket = socketRef.current;
       if (socket?.connected && driverId) {
-        socket.emit("update-location", {
+        socket?.emit("update-location", {
           orderId,
           latitude,
           longitude,
@@ -55,6 +55,8 @@ export const useLocationSender = ({
     if (!enabled || !orderId) return;
 
     const socket = socketRef.current;
+    if (!socket) return;
+
     socket.emit("join-room", orderId);
 
     return () => {
@@ -76,6 +78,7 @@ export const useLocationReceiver = ({
     if (!enabled || !orderId) return;
 
     const socket = socketRef.current;
+    if (!socket) return;
 
     const handleLocationUpdated = (data: LocationData & { driverId: string; timestamp: number }) => {
       onLocationUpdate?.(data);

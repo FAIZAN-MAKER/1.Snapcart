@@ -372,17 +372,18 @@ export default function MyOrdersPage() {
 
     const socket = getSocket();
     const isDev = process.env.NODE_ENV === "development";
-    
-    socket.on("order-status-changed", (data: { orderId: string; status: string }) => {
-      if (isDev) console.log("Real-time order update:", data);
-      fetchOrders();
-    });
+
+    if (socket) {
+      socket.on("order-status-changed", (data: { orderId: string; status: string }) => {
+        if (isDev) console.log("Real-time order update:", data);
+        fetchOrders();
+      });
+    }
 
     return () => {
-      socket.off("order-status-changed");
+      socket?.off("order-status-changed");
     };
-  }, []);
-
+  }, []); // <-- this was missing
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50/60 to-white pb-20 pt-8">
       <div className="max-w-2xl mx-auto px-4 sm:px-6">

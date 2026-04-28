@@ -154,10 +154,12 @@ export default function DeliveryMap({ orderId, destination, isPaid, onDelivered 
   // ── Join socket room ──
 
   useEffect(() => {
-    const socket = socketRef.current;
-    if (socket.connected) socket.emit("join-room", orderId);
-    return () => { socket.emit("leave-room", orderId); };
-  }, [orderId]);
+  const socket = socketRef.current;
+  if (!socket) return;
+
+  if (socket.connected) socket.emit("join-room", orderId);
+  return () => { socket.emit("leave-room", orderId); };
+}, [orderId]);
 
   // ── Location tracking ──
 
@@ -169,7 +171,7 @@ export default function DeliveryMap({ orderId, destination, isPaid, onDelivered 
 
       // Broadcast to socket
       const socket = socketRef.current;
-      if (socket.connected) {
+if (socket?.connected) {
         socket.emit("update-location", {
           orderId,
           latitude: loc[0],

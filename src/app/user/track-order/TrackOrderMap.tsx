@@ -134,6 +134,7 @@ export default function TrackOrderMap({ orderId, destination }: Props) {
   // Socket: join room and listen for driver location
   useEffect(() => {
     const socket = socketRef.current;
+    if (!socket) return;
 
     socket.emit("join-room", orderId);
     socket.on("location-updated", (data: { latitude: number; longitude: number }) => {

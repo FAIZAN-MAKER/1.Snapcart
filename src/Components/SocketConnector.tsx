@@ -18,9 +18,10 @@ export default function SocketConnector({ user }: SocketConnectorProps) {
 
   useEffect(() => {
     const socket = getSocket();
+    if (!socket) return;
 
     const handleConnect = async () => {
-      if (isDev) console.log("Socket connected:", socket.id);
+      if (isDev) console.log("Socket connected:", socket?.id);
       setIsConnected(true);
 
       try {
@@ -29,7 +30,7 @@ export default function SocketConnector({ user }: SocketConnectorProps) {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             userId: user._id,
-            socketId: socket.id,
+            socketId: socket?.id,
           }),
         });
 
@@ -41,7 +42,7 @@ export default function SocketConnector({ user }: SocketConnectorProps) {
     };
 
     const handleDisconnect = () => {
-      if (isDev) console.log("Socket disconnected:", socket.id);
+      if (isDev) console.log("Socket disconnected:", socket?.id);
       setIsConnected(false);
     };
 
