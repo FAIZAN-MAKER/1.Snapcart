@@ -408,7 +408,7 @@ export default function DeliveryBoy({ user }: DeliveryBoyProps) {
   return () => {
     socket.off("order-status-changed", fetchOrders);
   };
-}, [fetch
+}, [fetchOrders]);
 
   // ── Notifications ──
 
