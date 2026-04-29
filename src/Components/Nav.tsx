@@ -1,6 +1,6 @@
 "use client";
 
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import {
   Search, ShoppingCart, X, LogOut, ChevronDown,
@@ -12,16 +12,6 @@ import React, { useState, useRef, useEffect, useCallback, useMemo } from "react"
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { useSelector } from "react-redux";
 import { selectCartCount } from "../redux/cartSlice";
-
-interface IUser {
-  _id?: string;
-  name: string;
-  email: string;
-  password?: string;
-  mobile?: string;
-  role: "admin" | "user" | "deliveryBoy";
-  image?: string;
-}
 
 const useClickOutside = (ref: React.RefObject<HTMLDivElement | null>, handler: () => void) => {
   useEffect(() => {
@@ -47,13 +37,13 @@ const useDebounce = <T,>(value: T, delay: number): T => {
   return debouncedValue;
 };
 
-const Avatar = ({ user, size = "md" }: { user: IUser | null; size?: "sm" | "md" | "lg" }) => {
+const Avatar = ({ user, size = "md" }: { user: any | null; size?: "sm" | "md" | "lg" }) => {
   if (!user) {
     return <div className="w-9 h-9 bg-gray-200 rounded-xl" />;
   }
   const initials = useMemo(() =>
-    user.name?.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2) || "?",
-    [user.name]
+    user?.name?.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2) || "?",
+    [user?.name]
   );
   const dims = { sm: 28, md: 36, lg: 64 };
   const cls = {
@@ -103,8 +93,8 @@ const adminLinks = [
   { href: "/admin/manage-orders", icon: ClipboardList, label: "Manage Orders", desc: "Track & update orders" },
 ];
 
-const AdminSidebar = ({ user, open, onClose }: { user: IUser | null; open: boolean; onClose: () => void }) => {
-  const initials = useMemo(() => user?.name?.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2) || "?", [user?.name]);
+const AdminSidebar = ({ user, open, onClose }: { user: any | null; open: boolean; onClose: () => void }) => {
+  const initials = useMemo(() => user?.name?.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2) || "?", [user?.name]);
 
   useEffect(() => {
     const h = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
@@ -212,7 +202,8 @@ const CartBadge = () => {
   );
 };
 
-const Nav = ({ user }: { user: IUser | null }) => {
+const Nav = () => {
+  const { data: session, status } = useSession();
   const router = useRouter();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -221,6 +212,7 @@ const Nav = ({ user }: { user: IUser | null }) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
   const shouldReduceMotion = useReducedMotion();
+  const user = session?.user;
   const isAdmin = user?.role === "admin";
   const isUser = user?.role === "user";
   const isDeliveryBoy = user?.role === "deliveryBoy";

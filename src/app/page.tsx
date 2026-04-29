@@ -13,7 +13,12 @@ import SocketConnector from "@/Components/SocketConnector";
 export default async function Home() {
   await connectDb();
   const session = await auth();
-  const user = await User.findOne({ email: session?.user?.email });
+
+  if (!session?.user?.email) {
+    redirect("/login");
+  }
+
+  const user = await User.findOne({ email: session.user.email });
 
   if (!user) {
     redirect("/login");
@@ -30,7 +35,7 @@ export default async function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       <SocketConnector user={plainUser} />
-      <Nav user={plainUser} />
+      <Nav />
 
       {/* Main content area grows to push footer down */}
       <main className="flex-grow">

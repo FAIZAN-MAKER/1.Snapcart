@@ -53,7 +53,7 @@ function SearchContent() {
 
   return (
     <div className="min-h-screen pb-20 font-poppins bg-white">
-      <Nav user={null} />
+      <Nav />
 
       <main className="flex-grow">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

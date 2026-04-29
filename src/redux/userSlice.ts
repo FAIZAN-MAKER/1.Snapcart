@@ -1,19 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import mongoose from "mongoose";
 
-
-interface IUser {
-  _id?: mongoose.Types.ObjectId;
-  name: string;
-  email: string;
-  password?: string;
-  mobile?: string;
-  role: "admin" | "user" | "deliveryBoy";
-  image?: string;
-}
+// userSlice is deprecated for authentication.
+// Authentication is now handled by NextAuth session (useSession).
+// This slice is kept for potential future non-auth user state if needed.
 
 interface IUserSlice {
-  userData: IUser | null;
+  // Deprecated: Do not use for authentication
+  userData: null;
 }
 
 const initialState: IUserSlice = {
@@ -24,7 +17,9 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
+    // setUserData is deprecated - authentication now uses NextAuth session
     setUserData: (state, action) => {
+      console.warn("userSlice.setUserData is deprecated. Use NextAuth session instead.");
       state.userData = action.payload;
     }
   }

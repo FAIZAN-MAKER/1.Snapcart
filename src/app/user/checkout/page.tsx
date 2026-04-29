@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft, MapPin, User, Phone,
@@ -9,22 +11,13 @@ import {
   CheckCircle2,
   Loader2,
 } from "lucide-react";
-import { useSelector, useDispatch } from "react-redux";
-import { useRouter } from "next/navigation";
 import axios, { AxiosError } from "axios";
 import dynamic from "next/dynamic";
 import {
   selectCartSubtotal, selectDeliveryFee, selectFinalTotal,
   selectCartItems, clearCart,
 } from "../../../redux/cartSlice";
-
-interface IUser {
-  _id?: string;
-  name: string;
-  email: string;
-  mobile?: string;
-  role: "admin" | "user" | "deliveryBoy";
-}
+import { useDispatch, useSelector } from "react-redux";
 
 interface AddressFields {
   fullAddress: string;
@@ -93,20 +86,25 @@ const PaymentBtn = ({ selected, onClick, icon: Icon, label, sublabel }: {
 const CheckoutPage = () => {
   const dispatch = useDispatch();
   const router = useRouter();
+  const { data: session, status } = useSession();
 
   const subtotal = useSelector(selectCartSubtotal);
   const deliveryFee = useSelector(selectDeliveryFee);
   const finalTotal = useSelector(selectFinalTotal);
   const cartItems = useSelector(selectCartItems);
-  const userData: IUser | null = useSelector(
-    (state: { user: { userData: IUser | null } }) => state.user.userData
-  );
 
   const [address, setAddress] = useState<AddressFields>({ fullAddress: "", city: "", state: "", pincode: "" });
   const [coords, setCoords] = useState<[number, number] | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("cod");
   const [isLoading, setIsLoading] = useState(false);
   const [orderError, setOrderError] = useState("");
+
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/login");
+      return;
+    }
+  }, [status, router]);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -135,7 +133,6 @@ const CheckoutPage = () => {
   }, []);
 
   const buildPayload = () => ({
-    userId: userData!._id,
     items: cartItems.map((item) => ({
       grocery: item._id,
       quantity: item.quantity,
@@ -146,8 +143,8 @@ const CheckoutPage = () => {
     })),
     totalAmount: finalTotal.toFixed(0),
     address: {
-      fullName: userData!.name,
-      mobile: userData!.mobile ?? "",
+      fullName: session?.user?.name ?? "",
+      mobile: (session?.user as any)?.mobile ?? "",
       city: address.city,
       state: address.state,
       pinCode: address.pincode,
@@ -158,7 +155,7 @@ const CheckoutPage = () => {
   });
 
   const validate = () => {
-    if (!userData?._id) { setOrderError("User session expired. Please log in again."); return false; }
+    if (!session?.user?.id) { setOrderError("User session expired. Please log in again."); return false; }
     if (!address.fullAddress) { setOrderError("Please pin your delivery location on the map."); return false; }
     if (cartItems.length === 0) { setOrderError("Your cart is empty."); return false; }
     return true;
@@ -170,7 +167,7 @@ const CheckoutPage = () => {
     setOrderError("");
     setIsLoading(true);
     try {
-      await axios.post("/api/user/order", { ...buildPayload(), paymentMethod: "cod" });
+      await axios.post("/api/user/order", { ...buildPayload(), paymentMethod: "cod" }, { withCredentials: true });
       dispatch(clearCart());
       router.push("/user/order-success");
     } catch (err) {
@@ -190,7 +187,7 @@ const CheckoutPage = () => {
       const { data } = await axios.post("/api/user/payment", {
         ...buildPayload(),
         paymentMethod: "online",
-      });
+      }, { withCredentials: true });
       // Redirect to Stripe — cart cleared by webhook after payment
       window.location.href = data.url;
     } catch (err) {
@@ -201,6 +198,14 @@ const CheckoutPage = () => {
   };
 
   const handleSubmit = () => paymentMethod === "cod" ? handleCOD() : handleStripe();
+
+  if (status === "loading") {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-green-500" />
+      </div>
+    );
+  }
 
   const isDisabled = isLoading || cartItems.length === 0 || !address.fullAddress;
 
@@ -237,8 +242,8 @@ const CheckoutPage = () => {
                 <div><h2 className="font-bold text-gray-900 text-base">Delivery Details</h2><p className="text-xs text-gray-400">Confirm your contact info</p></div>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
-                <Field label="Full Name" icon={User} value={userData?.name ?? ""} readOnly />
-                <Field label="Mobile" icon={Phone} value={userData?.mobile ?? ""} readOnly />
+                <Field label="Full Name" icon={User} value={session?.user?.name ?? ""} readOnly />
+                <Field label="Mobile" icon={Phone} value={(session?.user as any)?.mobile ?? ""} readOnly />
               </div>
               <div className="grid grid-cols-1 gap-4">
                 <Field label="Full Address" icon={MapPin} value={address.fullAddress} onChange={(v) => setAddress((p) => ({ ...p, fullAddress: v }))} placeholder="Will be filled from map…" />
